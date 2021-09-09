@@ -7,7 +7,9 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.Transient;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
@@ -16,8 +18,7 @@ import com.fasterxml.jackson.annotation.JsonInclude.Include;
 public class Livro {
 	
 	@JsonInclude(Include.NON_NULL)
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Id	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	private String nome;
 	
@@ -28,11 +29,13 @@ public class Livro {
 	private String resumo;
 	
 	@JsonInclude(Include.NON_NULL)
-	@Transient
+	@OneToMany(mappedBy = "livro")
 	private List<Comentario> comentarios;
 	
 	@JsonInclude(Include.NON_NULL)
-	private String autor;
+	@ManyToOne
+	@JoinColumn(name = "AUTOR_ID")
+	private Autor autor;
 	
 	public Livro() {}
 
@@ -81,11 +84,11 @@ public class Livro {
 		this.comentarios = comentarios;
 	}
 
-	public String getAutor() {
+	public Autor getAutor() {
 		return autor;
 	}
 
-	public void setAutor(String autor) {
+	public void setAutor(Autor autor) {
 		this.autor = autor;
 	}
 
